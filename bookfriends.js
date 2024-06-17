@@ -30,9 +30,43 @@ loadFile('data/part_0.json')
   })
   .then(data => {
     books = books.concat(data);
+    return loadFile('data/part_5.json');
+  })
+  .then(data => {
+    books = books.concat(data);
+    return loadFile('data/part_6.json');
+  })
+  .then(data => {
+    books = books.concat(data);
+    return loadFile('data/part_7.json');
+  })
+  .then(data => {
+    books = books.concat(data);
+    return loadFile('data/part_8.json');
+  })
+  .then(data => {
+    books = books.concat(data);
+    return loadFile('data/part_9.json');
+  })
+  .then(data => {
+    books = books.concat(data);
+    return loadFile('data/part_10.json');
+  })
+  .then(data => {
+    books = books.concat(data);
+    return loadFile('data/part_11.json');
+  })
+  .then(data => {
+    books = books.concat(data);
+    return loadFile('data/part_12.json');
+  })
+  .then(data => {
+    books = books.concat(data);
+    return loadFile('data/part_13.json');
+  })
+  .then(data => {
+    books = books.concat(data);
     // All files have been loaded in order
-    console.log(books[0]); // Now 'books' contains all the data in order
-    console.log(books[6568])
   })
   .catch(error => {
     console.error('There has been a problem with your fetch operation:', error);
@@ -48,29 +82,35 @@ document.getElementById('searchForm').addEventListener('submit', function(event)
     displayResults(results);
 });
 
-function searchBooks(books, query) {
-    const resultIndices = [];
-    const resultBooks = [];
-  
-    books.forEach(book => {
-      if (book.title.toLowerCase().includes(query) || book.isbns.some(isbn => isbn.includes(query))) {
-        resultIndices.push(...book.nearest_indices);
-      }
-    });
-  
-    // Filter out duplicate indices
-    const uniqueIndices = [...new Set(resultIndices)];
-  
-    // Get the books using the unique indices
-    uniqueIndices.forEach(index => {
-      resultBooks.push(books[index]);
-    });
-  
-    return resultBooks;
+function searchBooks(books, targetISBN13) {
+  const resultBooks = [];
+
+  // Normalize the target ISBN13 by removing dashes
+  const normalizedTargetISBN13 = targetISBN13.replace(/-/g, '');
+
+  // Find the book with the matching ISBN13
+  const book = books.find(item => item.ISBN13.replace(/-/g, '') === normalizedTargetISBN13);
+
+  // If no book is found, return an empty array or a message
+  if (!book) {
+      return resultBooks; // or return 'No book found' if a message is preferred
   }
+
+  // Get the nearest indices of the found book
+  const resultIndices = book.nearest_indices;
+
+  // Get the books using the result indices
+  resultIndices.forEach(index => {
+      resultBooks.push(books[index]);
+  });
+
+  return resultBooks;
+}
+
   
 
 function displayResults(results) {
+    console.log(results)
     const featuredBookElement = document.getElementById('featuredBook');
     const booksGridElement = document.getElementById('booksGrid');
     const noResultsElement = document.getElementById('noResults');
@@ -80,15 +120,15 @@ function displayResults(results) {
     
     if (results.length > 0) {
         // Display the first result as featured book
-        featuredBookElement.querySelector('h3').textContent = results[0].title;
-        featuredBookElement.querySelector('p').textContent = results[0].text;
+        featuredBookElement.querySelector('h3').textContent = results[0].Titel;
+        featuredBookElement.querySelector('p').textContent = results[0]["Weitere Informationen"];
         featuredBookElement.style.display = '';
 
         // Display other results
         results.slice(1).forEach(book => {
             const card = document.createElement('div');
             card.className = 'card';
-            card.innerHTML = `<h3>${book.title}</h3><p>${book.text}</p>`;
+            card.innerHTML = `<h3>${book.Titel}</h3><p>${book["Weitere Informationen"]}</p>`;
             booksGridElement.appendChild(card);
         });
         

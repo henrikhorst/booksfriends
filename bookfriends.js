@@ -67,6 +67,8 @@ loadFile('data/part_0.json')
   .then(data => {
     books = books.concat(data);
     // All files have been loaded in order
+    // Enable the search field
+    document.getElementById('query').disabled = false;
   })
   .catch(error => {
     console.error('There has been a problem with your fetch operation:', error);

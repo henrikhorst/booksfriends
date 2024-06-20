@@ -69,6 +69,7 @@ loadFile('data/part_0.json')
     // All files have been loaded in order
     // Enable the search field
     document.getElementById('query').disabled = false;
+    document.getElementById('loadingMessage').style.display = 'none';
   })
   .catch(error => {
     console.error('There has been a problem with your fetch operation:', error);

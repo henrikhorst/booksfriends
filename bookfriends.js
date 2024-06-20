@@ -124,13 +124,19 @@ function displayResults(results) {
         featuredBookElement.querySelector('p').textContent = results[0]["Weitere Informationen"];
         featuredBookElement.style.display = '';
 
-        // Display other results
+        const featuredAuthor = results[0].Autor;
+        console.log(featuredAuthor)
+
+        // Display other results, filtering out books by the same author
         results.slice(1).forEach(book => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `<h3>${book.Titel}</h3><p>${book["Weitere Informationen"]}</p>`;
-            booksGridElement.appendChild(card);
-        });
+          console.log(book.Autor)
+          if (book.Autor !== featuredAuthor) {
+              const card = document.createElement('div');
+              card.className = 'card';
+              card.innerHTML = `<h3>${book.Titel}</h3><p>${book["Weitere Informationen"]}</p>`;
+              booksGridElement.appendChild(card);
+          }
+      });
         
         booksGridElement.style.display = '';
         noResultsElement.style.display = 'none';
